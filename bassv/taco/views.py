@@ -3,13 +3,13 @@ from .models import *
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import CourseReviewCreateForm
 
-# def custom_login(request):
-#     if request.user.is_authenticated():
-#         return HttpResponseRedirect()
-#     else:
-#         return login(request)
 
+def courseupdate_createview(request):
+    template_name='courses/(?P<pk>\\d+)/updates/create/'
+    context={}
+    return render (request, template_name, context)
 # Create your views here.
 @login_required
 def index(request):
@@ -44,14 +44,32 @@ class CourseDetailView(LoginRequiredMixin, generic.DetailView):
     model = Course
 
 
-class UpdateListView(LoginRequiredMixin, generic.ListView):
-    model = Update
+class CourseReviewListView(LoginRequiredMixin, generic.ListView):
+    model = CourseReview
 
-def update(request, pk):
-  course = get_object_or_404(Course, pk)
-  update = CourseReview(
-      comment=request.POST['comment'],
-      user=request.user,
-      Course=Course)
-  review.save()
-  return HttpResponseRedirect(reverse('course_detail', kwargs=(course.cid,)))
+def coursereview_createview(request, pk):
+
+    def _init_(self,*args,**kwargs):
+        self.user = kwargs.pop('user')
+  # course = get_object_or_404(Course, pk)
+
+  form = CourseReviewCreateForm(request.POST,user=request.user)
+  # errors = None
+
+
+  if form.is_valid():
+      form.save()
+      return HttpResponseRedirect(reverse('course_detail', kwargs=(course.cid)))
+
+  if form.errors
+      print(form.errors)
+
+  template_name= 'taco/form.html'
+  context={"form":form}
+  return render(request, template_name, context)
+  #
+
+
+class CourseReviewCreateView(CreateView):
+    form_class=CourseReviewCreateForm
+    template_name='/taco/form.html'

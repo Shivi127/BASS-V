@@ -91,11 +91,6 @@ class Course(models.Model):
 		display_ta.short_description = 'Ta'
 
 
-
-
-
-
-
 class Professor(models.Model):
 	pid = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text="Unique ID for the Professor")
 	pname = models.CharField(max_length=200, help_text="Enter Professor's Name")
@@ -138,8 +133,8 @@ class Update(models.Model):
 		return self.ustring
 
 
-class Update(models.Model):
-    comment = models.TextField(blank=True, null=True)
+class CourseReview(models.Model):
+    comment = models.CharField(blank=True, null=True)
     user = models.ForeignKey(User, default=1)
     date = models.DateField(default=date.today)
 
